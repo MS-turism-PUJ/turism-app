@@ -1,0 +1,15 @@
+[submodule "users"]
+	path = users
+	url = https://github.com/MS-turism-PUJ/users.git
+[submodule "registry"]
+	path = registry
+	url = https://github.com/MS-turism-PUJ/registry.git
+[submodule "apigateway"]
+	path = apigateway
+	url = https://github.com/MS-turism-PUJ/apigateway.git
+[submodule "webapp"]
+	path = webapp
+	url = https://github.com/MS-turism-PUJ/webapp.git
+[submodule "services"]
+	path = services
+	url = https://github.com/MS-turism-PUJ/services.git
