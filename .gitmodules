@@ -13,3 +13,6 @@
 [submodule "services"]
 	path = services
 	url = https://github.com/MS-turism-PUJ/services.git
+[submodule "payment"]
+	path = payment
+	url = https://github.com/MS-turism-PUJ/payment.git
