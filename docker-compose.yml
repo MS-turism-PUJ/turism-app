@@ -1,0 +1,86 @@
+services:
+  webapp:
+    build: ./webapp
+    ports:
+      - 8080:80
+    restart: always
+    container_name: webapp
+  users_db:
+    image: postgres:14-alpine
+    user: postgres
+    restart: always
+    healthcheck:
+      test: "pg_isready -U ${POSTGRES_USER} --dbname=${POSTGRES_DB}"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    container_name: users_db
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - users_db_volume:/var/lib/postgresql/data
+    env_file:
+      - .env
+  # services_db:
+  #   image: postgres:14-alpine
+  #   user: postgres
+  #   restart: always
+  #   healthcheck:
+  #     test: "pg_isready -U ${POSTGRES_USER} --dbname=${POSTGRES_DB}"
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   container_name: services_db
+  #   ports:
+  #     - ${POSTGRES_PORT}:5432
+  #   environment:
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #   command: |
+  #     postgres
+  #     -c wal_level=replica
+  #     -c hot_standby=on
+  #     -c max_wal_senders=10
+  #     -c max_replication_slots=10
+  #     -c hot_standby_feedback=on
+  #   volumes:
+  #     - services_db_volume:/var/lib/postgresql/data
+  #   env_file:
+  #     - .env
+  # payments_db:
+  #   image: postgres:14-alpine
+  #   user: postgres
+  #   restart: always
+  #   healthcheck:
+  #     test: "pg_isready -U ${POSTGRES_USER} --dbname=${POSTGRES_DB}"
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   container_name: payments_db
+  #   ports:
+  #     - ${POSTGRES_PORT}:5432
+  #   environment:
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #   command: |
+  #     postgres
+  #     -c wal_level=replica
+  #     -c hot_standby=on
+  #     -c max_wal_senders=10
+  #     -c max_replication_slots=10
+  #     -c hot_standby_feedback=on
+  #   volumes:
+  #     - payments_db_volume:/var/lib/postgresql/data
+  #   env_file:
+  #     - .env
+
+volumes:
+  users_db_volume:
+  services_db_volume:
+  payments_db_volume:
