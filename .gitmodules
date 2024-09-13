@@ -16,6 +16,3 @@
 [submodule "payment"]
 	path = payment
 	url = https://github.com/MS-turism-PUJ/payment.git
-[submodule "config-server"]
-	path = config-server
-	url = https://github.com/Code-Crafters-PUJ/config-server.git
