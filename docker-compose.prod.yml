@@ -1,4 +1,16 @@
 services:
+  registry:
+    build: ./registry
+    ports:
+      - 8761:8761
+    restart: always
+    container_name: registry
+  config_server:
+    build: ./config-server
+    ports:
+      - 8888:8888
+    restart: always
+    container_name: config-server
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.5
     ports:
@@ -34,6 +46,21 @@ services:
       - users_db_volume:/var/lib/postgresql/data
     env_file:
       - .env
+  gateway:
+    build: ./gateway
+    ports:
+      - 8080:8080
+    restart: always
+    container_name: gateway
+    depends_on:
+      - config_server
+      - registry
+  webapp:
+    build: ./webapp
+    ports:
+      - 80:80
+    restart: always
+    container_name: webapp
   # services_db:
   #   image: postgres:14-alpine
   #   user: postgres
