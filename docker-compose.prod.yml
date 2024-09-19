@@ -31,19 +31,59 @@ services:
     user: postgres
     restart: always
     healthcheck:
-      test: "pg_isready -U ${POSTGRES_USER} --dbname=${POSTGRES_DB}"
+      test: "pg_isready -U ${DB_USER} --dbname=${USERS_DB_NAME}"
       interval: 10s
       timeout: 5s
       retries: 5
     container_name: users_db
     ports:
-      - ${POSTGRES_PORT}:5432
+      - ${USERS_DB_PORT}:5432
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${USERS_DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - users_db_volume:/var/lib/postgresql/data
+    env_file:
+      - .env
+  services_db:
+    image: postgres:14-alpine
+    user: postgres
+    restart: always
+    healthcheck:
+      test: "pg_isready -U ${DB_USER} --dbname=${SERVICES_DB_NAME}"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    container_name: services_db
+    ports:
+      - ${SERVICES_DB_PORT}:5432
+    environment:
+      POSTGRES_DB: ${SERVICES_DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - services_db_volume:/var/lib/postgresql/data
+    env_file:
+      - .env
+  marketplace_db:
+    image: postgres:14-alpine
+    user: postgres
+    restart: always
+    healthcheck:
+      test: "pg_isready -U ${DB_USER} --dbname=${MARKETPLACE_DB_NAME}"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    container_name: marketplace_db
+    ports:
+      - ${MARKETPLACE_DB_PORT}:5432
+    environment:
+      POSTGRES_DB: ${MARKETPLACE_DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - marketplace_db_volume:/var/lib/postgresql/data
     env_file:
       - .env
   gateway:
@@ -61,62 +101,8 @@ services:
       - 80:80
     restart: always
     container_name: webapp
-  # services_db:
-  #   image: postgres:14-alpine
-  #   user: postgres
-  #   restart: always
-  #   healthcheck:
-  #     test: "pg_isready -U ${POSTGRES_USER} --dbname=${POSTGRES_DB}"
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   container_name: services_db
-  #   ports:
-  #     - ${POSTGRES_PORT}:5432
-  #   environment:
-  #     POSTGRES_DB: ${POSTGRES_DB}
-  #     POSTGRES_USER: ${POSTGRES_USER}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #   command: |
-  #     postgres
-  #     -c wal_level=replica
-  #     -c hot_standby=on
-  #     -c max_wal_senders=10
-  #     -c max_replication_slots=10
-  #     -c hot_standby_feedback=on
-  #   volumes:
-  #     - services_db_volume:/var/lib/postgresql/data
-  #   env_file:
-  #     - .env
-  # payments_db:
-  #   image: postgres:14-alpine
-  #   user: postgres
-  #   restart: always
-  #   healthcheck:
-  #     test: "pg_isready -U ${POSTGRES_USER} --dbname=${POSTGRES_DB}"
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   container_name: payments_db
-  #   ports:
-  #     - ${POSTGRES_PORT}:5432
-  #   environment:
-  #     POSTGRES_DB: ${POSTGRES_DB}
-  #     POSTGRES_USER: ${POSTGRES_USER}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #   command: |
-  #     postgres
-  #     -c wal_level=replica
-  #     -c hot_standby=on
-  #     -c max_wal_senders=10
-  #     -c max_replication_slots=10
-  #     -c hot_standby_feedback=on
-  #   volumes:
-  #     - payments_db_volume:/var/lib/postgresql/data
-  #   env_file:
-  #     - .env
 
 volumes:
   users_db_volume:
   services_db_volume:
-  payments_db_volume:
+  marketplace_db_volume:
