@@ -10,13 +10,13 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     command: start-dev --import-realm --optimized
     volumes:
-      - ./keycloak/data:/opt/keycloak/data
+      - keycloak_data_volume:/opt/keycloak/data
       - ./keycloak:/opt/keycloak/data/import
     env_file:
       - .env
   users_db:
     image: postgres:14-alpine
-    user: postgres
+    user: ${DB_USER}
     restart: always
     healthcheck:
       test: "pg_isready -U ${DB_USER} --dbname=${USERS_DB_NAME}"
@@ -36,7 +36,7 @@ services:
       - .env
   services_db:
     image: postgres:14-alpine
-    user: postgres
+    user: ${DB_USER}
     restart: always
     healthcheck:
       test: "pg_isready -U ${DB_USER} --dbname=${SERVICES_DB_NAME}"
@@ -56,7 +56,7 @@ services:
       - .env
   marketplace_db:
     image: postgres:14-alpine
-    user: postgres
+    user: ${DB_USER}
     restart: always
     healthcheck:
       test: "pg_isready -U ${DB_USER} --dbname=${MARKETPLACE_DB_NAME}"
@@ -78,9 +78,11 @@ services:
     image: prom/prometheus:v2.54.0
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/data:/prometheus
+      - prometheus_data_volume:/prometheus
     ports:
       - 9090:9090
+    restart: always
+    container_name: prometheus
   grafana:
     image: grafana/grafana:11.2.0-ubuntu
     ports:
@@ -89,9 +91,13 @@ services:
       - prometheus
     restart: always
     volumes:
-      - ./grafana/data:/var/lib/grafana
+      - grafana_data_volume:/var/lib/grafana
+    container_name: grafana
 
 volumes:
   users_db_volume:
   services_db_volume:
   marketplace_db_volume:
+  keycloak_data_volume:
+  prometheus_data_volume:
+  grafana_data_volume:
