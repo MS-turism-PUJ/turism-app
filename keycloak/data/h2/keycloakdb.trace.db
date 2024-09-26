@@ -106,3 +106,51 @@ select rae1_0.NAME,rae1_0.REALM_ID,rae1_0.VALUE from REALM_ATTRIBUTE rae1_0 wher
 2024-09-22 01:38:12.555697Z jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLIENT_INITIAL_ACCESS" not found (this database is empty); SQL statement:
 delete from CLIENT_INITIAL_ACCESS where (EXPIRATION>0 and (TIMESTAMP+EXPIRATION)<?) or REMAINING_COUNT=0 [42104-224]
+2024-09-26 14:02:46.143885Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "REALM" not found (this database is empty); SQL statement:
+select distinct re1_0.EVENTS_EXPIRATION from REALM re1_0 where re1_0.EVENTS_EXPIRATION>0 [42104-224]
+2024-09-26 14:02:46.279526Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "REALM" not found (this database is empty); SQL statement:
+select re1_0.ID from REALM re1_0 [42104-224]
+2024-09-26 14:02:46.377835Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "REALM_ATTRIBUTE" not found (this database is empty); SQL statement:
+select rae1_0.NAME,rae1_0.REALM_ID,rae1_0.VALUE from REALM_ATTRIBUTE rae1_0 where rae1_0.NAME=? and character_length(rae1_0.VALUE)>0 [42104-224]
+2024-09-26 14:02:46.963679Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLIENT_INITIAL_ACCESS" not found (this database is empty); SQL statement:
+delete from CLIENT_INITIAL_ACCESS where (EXPIRATION>0 and (TIMESTAMP+EXPIRATION)<?) or REMAINING_COUNT=0 [42104-224]
+2024-09-26 14:17:46.154813Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "REALM" not found (this database is empty); SQL statement:
+select distinct re1_0.EVENTS_EXPIRATION from REALM re1_0 where re1_0.EVENTS_EXPIRATION>0 [42104-224]
+2024-09-26 14:17:46.278357Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "REALM" not found (this database is empty); SQL statement:
+select re1_0.ID from REALM re1_0 [42104-224]
+2024-09-26 14:17:46.377857Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "REALM_ATTRIBUTE" not found (this database is empty); SQL statement:
+select rae1_0.NAME,rae1_0.REALM_ID,rae1_0.VALUE from REALM_ATTRIBUTE rae1_0 where rae1_0.NAME=? and character_length(rae1_0.VALUE)>0 [42104-224]
+2024-09-26 14:17:46.963884Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLIENT_INITIAL_ACCESS" not found (this database is empty); SQL statement:
+delete from CLIENT_INITIAL_ACCESS where (EXPIRATION>0 and (TIMESTAMP+EXPIRATION)<?) or REMAINING_COUNT=0 [42104-224]
+2024-09-26 14:32:46.145416Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "REALM" not found (this database is empty); SQL statement:
+select distinct re1_0.EVENTS_EXPIRATION from REALM re1_0 where re1_0.EVENTS_EXPIRATION>0 [42104-224]
+2024-09-26 14:32:46.279284Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "REALM" not found (this database is empty); SQL statement:
+select re1_0.ID from REALM re1_0 [42104-224]
+2024-09-26 14:32:46.377284Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "REALM_ATTRIBUTE" not found (this database is empty); SQL statement:
+select rae1_0.NAME,rae1_0.REALM_ID,rae1_0.VALUE from REALM_ATTRIBUTE rae1_0 where rae1_0.NAME=? and character_length(rae1_0.VALUE)>0 [42104-224]
+2024-09-26 14:32:46.964564Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLIENT_INITIAL_ACCESS" not found (this database is empty); SQL statement:
+delete from CLIENT_INITIAL_ACCESS where (EXPIRATION>0 and (TIMESTAMP+EXPIRATION)<?) or REMAINING_COUNT=0 [42104-224]
+2024-09-26 14:39:05.086077Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "MIGRATION_MODEL" not found (this database is empty); SQL statement:
+SELECT ID, VERSION FROM MIGRATION_MODEL ORDER BY UPDATE_TIME DESC [42104-224]
+2024-09-26 14:39:06.617516Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATABASECHANGELOG" not found (this database is empty); SQL statement:
+SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOG [42104-224]
+2024-09-26 14:39:07.051947Z jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATABASECHANGELOGLOCK" not found (this database is empty); SQL statement:
+SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOGLOCK [42104-224]
+2024-09-26 14:39:07.132972Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATABASECHANGELOG" not found; SQL statement:
+SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOG [42102-224]
