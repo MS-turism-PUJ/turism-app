@@ -111,12 +111,12 @@ services:
       - marketplace_db_volume:/var/lib/postgresql/data
     env_file:
       - .env
-  gateway:
-    build: ./gateway
+  apigateway:
+    build: ./apigateway
     ports:
       - 8080:8080
     restart: always
-    container_name: gateway
+    container_name: apigateway
     depends_on:
       - registry
       - config_server
