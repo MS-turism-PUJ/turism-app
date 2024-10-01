@@ -116,6 +116,17 @@ services:
     volumes:
       - grafana_data_volume:/var/lib/grafana
     container_name: grafana
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9001:9000"
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    volumes:
+      - minio_data:/data
+    command: server /data
 
 volumes:
   users_db_volume:
@@ -126,3 +137,4 @@ volumes:
   grafana_data_volume:
   zookeeper_data:
   kafka_data:
+  minio_data:
