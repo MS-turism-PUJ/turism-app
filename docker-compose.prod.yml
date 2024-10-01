@@ -11,6 +11,8 @@ services:
       - 8888:8888
     restart: always
     container_name: config-server
+    depends_on:
+      - registry
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.5
     ports:
@@ -22,13 +24,36 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     command: start-dev --import-realm --optimized
     volumes:
-      - ./keycloak/data:/opt/keycloak/data
+      - keycloak_data_volume:/opt/keycloak/data
       - ./keycloak:/opt/keycloak/data/import
     env_file:
       - .env
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    image: confluentinc/cp-kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
   users_db:
     image: postgres:14-alpine
-    user: postgres
+    user: ${DB_USER}
     restart: always
     healthcheck:
       test: "pg_isready -U ${DB_USER} --dbname=${USERS_DB_NAME}"
@@ -48,7 +73,7 @@ services:
       - .env
   services_db:
     image: postgres:14-alpine
-    user: postgres
+    user: ${DB_USER}
     restart: always
     healthcheck:
       test: "pg_isready -U ${DB_USER} --dbname=${SERVICES_DB_NAME}"
@@ -68,7 +93,7 @@ services:
       - .env
   marketplace_db:
     image: postgres:14-alpine
-    user: postgres
+    user: ${DB_USER}
     restart: always
     healthcheck:
       test: "pg_isready -U ${DB_USER} --dbname=${MARKETPLACE_DB_NAME}"
@@ -86,28 +111,59 @@ services:
       - marketplace_db_volume:/var/lib/postgresql/data
     env_file:
       - .env
-  gateway:
-    build: ./gateway
+  apigateway:
+    build: ./apigateway
     ports:
       - 8080:8080
     restart: always
-    container_name: gateway
+    container_name: apigateway
     depends_on:
-      - config_server
       - registry
-  webapp:
-    build: ./webapp
+      - config_server
+      - keycloak
+  users:
+    build: ./users
     ports:
-      - 80:80
+      - 8081:8081
     restart: always
-    container_name: webapp
+    container_name: users
+    depends_on:
+      - registry
+      - config_server
+      - keycloak
+      - users_db
+      - kafka
+  services:
+    build: ./services
+    ports:
+      - 8082:8082
+    restart: always
+    container_name: services
+    depends_on:
+      - registry
+      - config_server
+      - services_db
+      - kafka
+  marketplace:
+    build: ./marketplace
+    ports:
+      - 8083:8083
+    restart: always
+    container_name: marketplace
+    depends_on:
+      - registry
+      - config_server
+      - marketplace_db
+      - kafka
   prometheus:
     image: prom/prometheus:v2.54.0
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/data:/prometheus
+      - prometheus_data_volume:/prometheus
     ports:
       - 9090:9090
+    restart: always
+    container_name: prometheus
   grafana:
     image: grafana/grafana:11.2.0-ubuntu
     ports:
@@ -116,9 +172,15 @@ services:
       - prometheus
     restart: always
     volumes:
-      - ./grafana/data:/var/lib/grafana
+      - grafana_data_volume:/var/lib/grafana
+    container_name: grafana
 
 volumes:
   users_db_volume:
   services_db_volume:
   marketplace_db_volume:
+  keycloak_data_volume:
+  prometheus_data_volume:
+  grafana_data_volume:
+  zookeeper_data:
+  kafka_data:
