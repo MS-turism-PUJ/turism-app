@@ -121,6 +121,17 @@ services:
       - registry
       - config_server
       - keycloak
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9001:9000"
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    volumes:
+      - minio_data:/data
+    command: server /data
   users:
     build: ./users
     ports:
@@ -133,6 +144,7 @@ services:
       - keycloak
       - users_db
       - kafka
+      - minio
   services:
     build: ./services
     ports:
