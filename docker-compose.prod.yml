@@ -10,7 +10,7 @@ services:
     ports:
       - 8888:8888
     restart: always
-    container_name: config-server
+    container_name: config_server
     depends_on:
       - registry
   keycloak:
@@ -27,7 +27,7 @@ services:
       - keycloak_data_volume:/opt/keycloak/data
       - ./keycloak:/opt/keycloak/data/import
     env_file:
-      - .env
+      - prod.env
   zookeeper:
     image: confluentinc/cp-zookeeper
     container_name: zookeeper
@@ -70,7 +70,7 @@ services:
     volumes:
       - users_db_volume:/var/lib/postgresql/data
     env_file:
-      - .env
+      - prod.env
   services_db:
     image: postgres:14-alpine
     user: ${DB_USER}
@@ -90,7 +90,7 @@ services:
     volumes:
       - services_db_volume:/var/lib/postgresql/data
     env_file:
-      - .env
+      - prod.env
   marketplace_db:
     image: postgres:14-alpine
     user: ${DB_USER}
@@ -110,7 +110,7 @@ services:
     volumes:
       - marketplace_db_volume:/var/lib/postgresql/data
     env_file:
-      - .env
+      - prod.env
   apigateway:
     build: ./apigateway
     ports:
