@@ -212,3 +212,4 @@ volumes:
   grafana_data_volume:
   zookeeper_data:
   kafka_data:
+  minio_data:
